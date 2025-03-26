@@ -1,98 +1,166 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+MultisenderSDK - Ethereum Batch Transaction Toolkit
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The MultisenderSDK is a TypeScript-based SDK designed to streamline batch transactions on the Ethereum blockchain. It integrates with an audited open-source multisend contract, supporting both native ETH and ERC-20 token transfers, with built-in gas estimation for cost efficiency.
+Features
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+    Batch ETH Transfers: Send ETH to multiple recipients in a single transaction.
 
-## Description
+    Batch ERC-20 Transfers: Handle token transfers with automatic approval processing.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+    Dynamic Gas Estimation: Uses real-time fee data for accurate gas limit calculations.
 
-## Project setup
+    Transaction Status Tracking: Monitor transaction confirmations and status.
 
-```bash
-$ npm install
-```
+    Flexible Configuration: Compatible with any multisend contract that meets the Solidity 0.8.20 and auditing requirements.
 
-## Compile and run the project
+Prerequisites
 
-```bash
-# development
-$ npm run start
+    Node.js: Version 16 or higher
 
-# watch mode
-$ npm run start:dev
+    ethers.js: Version 6.x
 
-# production mode
-$ npm run start:prod
-```
+    Ethereum Provider: Access to an RPC endpoint (e.g., Infura, Alchemy)
 
-## Run tests
+    Wallet: A private key or mnemonic for signing transactions
 
-```bash
-# unit tests
-$ npm run test
+    Deployed Contract: Address of the multisend contract (Solidity 0.8.20, audited)
 
-# e2e tests
-$ npm run test:e2e
+Installation
+Set Up Your Project
 
-# test coverage
-$ npm run test:cov
-```
+Create a new Node.js project or use an existing one:
 
-## Deployment
+npm init -y
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Install ethers.js
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+npm install ethers
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+Add MultisenderSDK
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Save the MultisenderSDK class (from the provided code) into a file, e.g., multisender.ts, in your project directory.
+Quick Start
+Initialize the SDK
 
-## Resources
+import { ethers } from 'ethers';
+import { MultisenderSDK } from './multisender'; // Adjust path as necessary
 
-Check out a few resources that may come in handy when working with NestJS:
+// Configure provider and signer
+const provider = new ethers.JsonRpcProvider('https://mainnet.infura.io/v3/YOUR_INFURA_KEY');
+const signer = new ethers.Wallet('YOUR_PRIVATE_KEY', provider);
+const contractAddress = '0xYourDeployedContractAddress';
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+// Create SDK instance
+const multisender = new MultisenderSDK(provider, contractAddress, signer);
 
-## Support
+Send ETH in Batch
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+async function sendEth() {
+  const recipients = ['0xRecipient1', '0xRecipient2'];
+  const amounts = ['0.1', '0.2']; // ETH amounts
 
-## Stay in touch
+  try {
+    const tx = await multisender.sendEthBatch(recipients, amounts);
+    console.log(`ETH batch sent: ${tx.hash}`);
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    const receipt = await tx.wait();
+    console.log('Transaction confirmed:', receipt);
+  } catch (error) {
+    console.error('Failed to send ETH batch:', error.message);
+  }
+}
 
-## License
+sendEth();
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Send ERC-20 Tokens in Batch
+
+async function sendTokens() {
+  const tokenAddress = '0xTokenContractAddress'; // e.g., USDC
+  const recipients = ['0xRecipient1', '0xRecipient2'];
+  const amounts = ['10', '20']; // Token amounts (adjusted for decimals)
+
+  try {
+    const tx = await multisender.sendTokenBatch(tokenAddress, recipients, amounts);
+    console.log(`Token batch sent: ${tx.hash}`);
+
+    const receipt = await tx.wait();
+    console.log('Transaction confirmed:', receipt);
+  } catch (error) {
+    console.error('Failed to send token batch:', error.message);
+  }
+}
+
+sendTokens();
+
+API Overview
+Constructor
+
+new MultisenderSDK(provider: ethers.JsonRpcProvider, contractAddress: string, signer: ethers.Wallet)
+
+    provider: Ethereum RPC provider
+
+    contractAddress: Deployed multisend contract address
+
+    signer: Wallet for signing transactions
+
+Methods
+
+    sendEthBatch(recipients: string[], amounts: string[]): Promise<ethers.TransactionResponse>
+    Sends ETH to multiple recipients in one transaction.
+
+    sendTokenBatch(tokenAddress: string, recipients: string[], amounts: string[]): Promise<ethers.TransactionResponse>
+    Sends ERC-20 tokens to multiple recipients, handling approvals if needed.
+
+    getTransactionStatus(txHash: string): Promise<ethers.TransactionReceipt | null>
+    Retrieves the receipt for a given transaction hash.
+
+Gas Estimation
+
+The SDK calculates gas dynamically:
+
+    Uses estimateGas for accurate limits, with a 20% buffer.
+
+    Fetches maxPriorityFeePerGas and block baseFeePerGas for fee optimization.
+
+    Ensures sufficient ETH balance for both fees and transfers.
+
+Error Handling
+
+Common errors are caught and logged, including:
+
+    Insufficient Balance: For ETH or tokens.
+
+    Invalid Recipient/Amount Arrays: Ensuring inputs are valid.
+
+    Gas Estimation Failures: Handling exceptions during fee calculation.
+
+Configuration
+
+    Custom Provider: Swap the provider URL or use a different service (e.g., Alchemy).
+
+    Contract Address: Update to match your deployed multisend contract.
+
+    Signer: Use a different wallet or connect via a browser provider (e.g., MetaMask).
+
+Example Deployment
+
+    Deploy the multisend contract using Hardhat or Remix.
+
+    Fund your wallet with ETH for gas and fees.
+
+    Test on a testnet (e.g., Sepolia) before mainnet use.
+
+Troubleshooting
+
+    "Insufficient balance": Ensure the signer has enough ETH for both gas and transfers.
+
+    "Allowance too low": The SDK auto-approves tokens, but verify token contract compatibility.
+
+    Transaction failures: Confirm that the contract address and network are correctly configured.
+
+Contributing
+
+Feel free to fork, modify, and submit pull requests. Contributions such as adding unit tests or new features are welcome.
+License
+
+MIT License - Free to use, modify, and distribute.
